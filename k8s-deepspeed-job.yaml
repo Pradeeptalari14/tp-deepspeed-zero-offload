@@ -1,0 +1,35 @@
+apiVersion: kubeflow.org/v1
+kind: MPIJob
+metadata:
+  name: deepspeed-zero3-training
+  namespace: ai-training
+spec:
+  slotsPerWorker: 8
+  runPolicy:
+    cleanPodPolicy: Running
+  mpiReplicaSpecs:
+    Launcher:
+      replicas: 1
+      template:
+        spec:
+          containers:
+            - name: mpi-launcher
+              image: deepspeed/deepspeed:v0.14.0
+              command: ["deepspeed", "--hostfile=/etc/mpi/hostfile", "train.py", "--deepspeed_config=ds_config.json"]
+    Worker:
+      replicas: 2
+      template:
+        spec:
+          volumes:
+            - name: nvme-storage
+              hostPath:
+                path: /mnt/nvme
+          containers:
+            - name: mpi-worker
+              image: deepspeed/deepspeed:v0.14.0
+              resources:
+                limits:
+                  nvidia.com/gpu: 8
+              volumeMounts:
+                - name: nvme-storage
+                  mountPath: /nvme_offload

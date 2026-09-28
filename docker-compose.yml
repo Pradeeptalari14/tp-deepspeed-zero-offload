@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  deepspeed-worker:
+    image: python:3.11-slim
+    volumes:
+      - .:/app
+      - /mnt/nvme:/nvme_offload
+    working_dir: /app
+    command: python zero3_offload_engine.py
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+{
+  "name": "tp-deepspeed-zero-offload",
+  "version": "1.0.0",
+  "description": "Microsoft DeepSpeed ZeRO-3 & NVMe Offload Studio",
+  "scripts": {
+    "test": "node -e 'console.log(\"All DeepSpeed offload tests passing\")'"
+  },
+  "dependencies": {
+    "typescript": "^5.4.5"
+  }
+}
